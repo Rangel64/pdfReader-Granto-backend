@@ -22,9 +22,6 @@ from starlette.datastructures import UploadFile as StarletteUploadFile
 import os
 import subprocess
 
-# from reportlab.lib.pagesizes import letter
-# from reportlab.pdfgen import canvas
-
 os.system("ollama pull")
 os.system("ollama run llama3")
 os.system("kill $(pgrep ollama)")
@@ -89,7 +86,6 @@ async def create_access_token(user_data: LoginSchema, response: Response):
         
         token = user["idToken"]
         
-        # Definir o cookie com o token
         response.set_cookie(key="Authorization", value=token, httponly=True, samesite='Strict')
         
         return JSONResponse(content={"message": "Login successful", "token": token}, status_code=200)
@@ -139,14 +135,9 @@ async def export_user_file(file_id: str):
         pdf.set_text_color(0, 0, 0)
         pdf.cell(200, 10, txt="Dados extraídos do arquivo", ln=True, align="C")        
         
-        # for line in file_data.get("extracted_data").split("\n"):
-            # pdf.cell(90, 10, txt=line, ln=True)    
-        # fazer a mesma coisa mas com quebra de linha
-
         for line in file_data.get("extracted_data").split("\n"):
             pdf.multi_cell(0, 10, line)
 
-    
         pdf.output(pdf_path)
         
         pdf_url = upload_pdf(UploadFile(file=pdf_path, filename=file_data.get("file_name")+"_response.pdf"))
@@ -224,25 +215,22 @@ async def get_user_files(request: Request):
         return JSONResponse(content={"error": str(e)}, status_code=400)
 
 
-# Depends(get_current_user)
+
 @app.post("/upload")
 async def upload_file(request: Request, file: UploadFile = File(...), query: str = Form(...)):
     
     command = "ollama serve"
     subprocess.Popen(command, shell=True)
 
-    # async def upload_file(file: UploadFile = File(...), query: str = Form(...), user_id: str = token_test):
     file_type = file.filename.split(".")[-1].lower()
-    original_filename = file.filename.rsplit(".", 1)[0]  # Extrai o nome do arquivo sem a extensão
+    original_filename = file.filename.rsplit(".", 1)[0]
     file_path = f"tmp/{file.filename}"
     
     try:
         user_id = get_current_user(request)
-        # Salvar o arquivo carregado temporariamente no disco
         with open(file_path, "wb") as buffer:
             buffer.write(await file.read())
 
-        # Verificar se o arquivo não é um PDF
         if file_type != "pdf":
             pdf_path = f"tmp/{original_filename}.pdf"
 
@@ -272,7 +260,6 @@ async def upload_file(request: Request, file: UploadFile = File(...), query: str
 
             file_path = pdf_path
 
-        # Ler o PDF resultante e salvar em uma variável UploadFile
         with open(file_path, "rb") as pdf_file:
             pdf_bytes = pdf_file.read()
             pdf_upload_file = StarletteUploadFile(file=io.BytesIO(pdf_bytes), filename=f"{original_filename}.pdf")
@@ -288,15 +275,12 @@ async def upload_file(request: Request, file: UploadFile = File(...), query: str
             "extracted_data": final_response,
             "file_url": pdf_url
         }
-        # db.child("user_files").push(file_metadata)
 
         response = db.child("user_files").push(file_metadata)
-        file_key = response['name']  # A chave gerada pelo Firebase
+        file_key = response['name']
         
-        # Adicionar file_id aos metadados do arquivo
         file_metadata['file_id'] = file_key
 
-        # Limpar arquivos temporários
         if os.path.exists(file_path):
             os.remove(file_path)
             
@@ -361,7 +345,6 @@ def query_the_llm(answer, llm_model, query):
     final_response = llm_model.generate(prompt=prompt_message)
     return final_response
 
-# @app.post("/pdfReader/")
 async def read_pdf_reader(file: str, query: str = "Retorne os seguinte itens: CNPJs, Valores numéricos que mensuram valor monetário, Empresa Contratante, Empresa Contratada, Vigência do contrato."):
     
     os.system("ollama run llama3")
