@@ -27,8 +27,8 @@ Este repositório contém uma aplicação de servidor baseada em FastAPI para li
 
 1. Clone este repositório:
     ```sh
-    git clone <url-do-repositorio>
-    cd <nome-do-repositorio>
+    git clone <https://github.com/Rangel64/pdfReader-Granto-backend.git>
+    cd <pdfReader-Granto-backend>
     ```
 
 2. Crie um ambiente virtual e ative-o:
