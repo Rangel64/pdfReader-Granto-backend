@@ -1,0 +1,11 @@
+{
+    "$schema": "https://railway.app/railway.schema.json",
+    "build": {
+      "builder": "NIXPACKS",
+      "nixpacksVersion": "1.24.1",
+      "buildCommand": "pip install -r requirements.txt"
+    },
+    "deploy": {
+      "startCommand": "sh -c 'ollama serve & hypercorn main:app --bind \"[::]:$PORT\"'"
+    }
+  }
