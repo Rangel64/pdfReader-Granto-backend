@@ -1,4 +1,4 @@
-# API de Processamento de Arquivos PDF
+# PDFReader-SCRIPTORS-backend
 
 Este repositório contém uma aplicação de servidor baseada em FastAPI para lidar com uploads de arquivos PDF, autenticação de usuários e processamento de arquivos. Ele integra o Firebase para gerenciamento de usuários e armazenamento, e utiliza várias bibliotecas para manipulação de PDFs e outros tipos de arquivos.
 
@@ -12,7 +12,7 @@ Este repositório contém uma aplicação de servidor baseada em FastAPI para li
 - Endpoints de API RESTful
 
 ## Tecnologias Utilizadas
-
+- **LLama3 Model**: LLM utilizada para extração de informações
 - **FastAPI**: Framework web para construção de APIs
 - **Firebase**: Backend como Serviço para autenticação e armazenamento
 - **PyPDF2**: Biblioteca para manipulação de PDFs
@@ -70,11 +70,3 @@ Este repositório contém uma aplicação de servidor baseada em FastAPI para li
 ### Raiz
 
 - **Status do Servidor**: `GET /`
-
-## Contribuição
-
-Contribuições são bem-vindas! Sinta-se à vontade para abrir uma issue ou enviar um pull request.
-
-## Licença
-
-Este projeto está licenciado sob os termos da licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
